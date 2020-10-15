@@ -24,3 +24,4 @@ This code is written in Python 3. These dependencies will be needed to run the c
 * Scipy
 
 Execute `python Sleepiness_Detection.py` to run the script
+The `.dat` can be downloaded from [here](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2)
