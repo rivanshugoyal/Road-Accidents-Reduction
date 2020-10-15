@@ -18,7 +18,7 @@ def draw_contour(frame, landmark, clr=(0,255,0)):
     landmarkHull = cv2.convexHull(landmark)
     cv2.drawContours(frame, [landmarkHull], -1, clr, 1)
 
-def sleepiness_detection():
+def sleepiness_detection(thresh, frame_check):
     """Detects if a person feeling sleepy or not by evaluating EAR value"""
     face_detector = dlib.get_frontal_face_detector()
     # .dat file is pre-trained model for face detection
@@ -50,8 +50,10 @@ def sleepiness_detection():
             if EAR < thresh:
                 frame_counter += 1
                 print(frame_counter)
-
-        """To DO ALERT DISPLAY"""
+                if frame_counter >= frame_check:
+                    cv2.putText(frame, "********* EAR = "+str(round(EAR, 3))+" *********", (10,325),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+                    print("\aWake Up!")
             else:
                 frame_counter = 0
         cv2.imshow("Main Camera", frame)
@@ -62,6 +64,13 @@ def sleepiness_detection():
     cv2.destroyAllWindows()
     stream.stop()
 
+def main():
+    parser = argparse.ArgumentParser(description="Laziness discovery utilizing pre-trained face indicator")
+    parser.add_argument("--thresh",help="Threshold value of EAR", type=int, default=0.25)
+    parser.add_argument("--fc",help="Threshold value of frame counter", type=int, default=45)
+    args = parser.parse_args()
+
+    sleepiness_detection(args.thresh, args.fc)
 
 if __name__=='__main__':
-    sleepiness_detection()
+    main()
