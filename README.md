@@ -4,9 +4,6 @@
 Conceptualise and design a solution to reduce the accidents on highways
 
 ## Proposed Solution
-
-# Road-Accidents-Reduction
-
 Our ideas to the given problem (Problem 9):
 
 **Sleepiness Detection (Driver Distraction/Unawareness)** - We can place a camera just infront of the driver to detect sleepiness and if sleepiness is detected, the system can generate an alert to wake up the driver whilst decelerating the vehicle.
