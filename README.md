@@ -19,3 +19,12 @@ Our ideas to the given problem (Problem 9):
 
 
 ## Procedure to run Sleepiness_Detection
+
+Necessary Dependencies
+* numpy
+* dlib
+* imutils
+* cv2
+* scipy
+
+Execute `python Sleepiness_Detection.py` to run the script
