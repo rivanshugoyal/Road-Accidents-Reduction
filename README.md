@@ -15,13 +15,12 @@ Our ideas to the given problem (Problem 9):
 **Obstacle Detection (Collision avoidance in case of less visibility)** - Using the proximity and distance sensor to find any object in the vehicle's vicinity in less visibility conditions to the driver for example, during snowfall, rainy days, foggy days etc. This will again alert the driver and slow down the vehicle.
 
 
-## Procedure to run Sleepiness_Detection
-
-Necessary Dependencies
-* numpy
+## Procedure to run `Sleepiness_Detection.py`
+This code is written in Python 3. These dependencies will be needed to run the code:
+* Numpy
 * dlib
 * imutils
-* cv2
-* scipy
+* OpenCV
+* Scipy
 
 Execute `python Sleepiness_Detection.py` to run the script
