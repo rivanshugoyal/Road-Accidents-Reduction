@@ -25,4 +25,6 @@ This code is written in Python 3. These dependencies will be needed to run the c
 
 Execute `python Sleepiness_Detection.py` to run the script. 
 
-The `.dat` file is taken from [here.](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2)
+### References
+* The `.dat` file is taken from [here.](http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2)
+* EAR concept is taken from the work of [Soukupová and Čech](http://vision.fe.uni-lj.si/cvww2016/proceedings/papers/05.pdf) in their 2016 paper.
