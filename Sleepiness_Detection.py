@@ -18,9 +18,11 @@ def draw_contour(frame, landmark, clr=(0,255,0)):
     landmarkHull = cv2.convexHull(landmark)
     cv2.drawContours(frame, [landmarkHull], -1, clr, 1)
 
-def sleepiness_detection(thresh, frame_check):
+def sleepiness_detection(thresh, eye_check, face_check):
     """Detects if a person feeling sleepy or not by evaluating EAR value"""
+
     face_detector = dlib.get_frontal_face_detector()
+    
     # .dat file is pre-trained model for face detection
     # available at http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
     face_shape_predictor = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
@@ -28,13 +30,23 @@ def sleepiness_detection(thresh, frame_check):
     (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_68_IDXS["right_eye"]
 
     stream=cv2.VideoCapture(0)
-    frame_counter=0
+    eye_frame_counter, face_frame_counter = 0, 0
 
     while True:
         ret, frame = stream.read()
         frame = imutils.resize(frame, width=500)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = face_detector(gray)
+
+        if len(faces) == 0:
+            face_frame_counter += 1
+            print("#Frames when eyes not on the road: ", face_frame_counter)
+            if face_frame_counter >= face_check:
+                cv2.putText(frame, "Eyes not on the Road!", (10,325),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+                print("\a Look front!")
+        else:
+            face_frame_counter = 0
 
         for face in faces:
             face_contour = face_shape_predictor(gray, face)
@@ -48,14 +60,14 @@ def sleepiness_detection(thresh, frame_check):
             draw_contour(frame, rightEye)
 
             if EAR < thresh:
-                frame_counter += 1
-                print(frame_counter)
-                if frame_counter >= frame_check:
+                eye_frame_counter += 1
+                print("#Frames when eyes were not open: ", eye_frame_counter)
+                if eye_frame_counter >= eye_check:
                     cv2.putText(frame, "********* EAR = "+str(round(EAR, 3))+" *********", (10,325),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-                    print("\aWake Up!")
+                    print("\a Wake Up!")
             else:
-                frame_counter = 0
+                eye_frame_counter = 0
         cv2.imshow("Main Camera", frame)
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q"):
@@ -67,10 +79,11 @@ def sleepiness_detection(thresh, frame_check):
 def main():
     parser = argparse.ArgumentParser(description="Laziness discovery utilizing pre-trained face indicator")
     parser.add_argument("--thresh",help="Threshold value of EAR", type=int, default=0.25)
-    parser.add_argument("--fc",help="Threshold value of frame counter", type=int, default=45)
+    parser.add_argument("--ffc",help="Threshold value of face frame counter", type=int, default=200)
+    parser.add_argument("--efc",help="Threshold value of eye frame counter", type=int, default=45)
     args = parser.parse_args()
 
-    sleepiness_detection(args.thresh, args.fc)
+    sleepiness_detection(args.thresh, args.efc, args.ffc)
 
 if __name__=='__main__':
     main()
